@@ -1,8 +1,3 @@
-def COLOR_MAP = [
-    'SUCCESS' : 'good',
-    'FAILURE' : 'danger'
-]
-
 pipeline{
     agent any
     tools {
@@ -23,18 +18,6 @@ pipeline{
         SONAR_SCANNER = 'SONARSCANNER'
     }
     stages{
-        stage('NOTIFICATION TO SLACK'){
-            steps {
-                echo 'Pipeline started'
-            }
-            post {
-                always{
-                    slackSend channel: '#devops-project',
-                    color: 'good',
-                    message: "Job is started Job name: ${env.JOB_NAME} build ${env.BUILD_NUMBER} time ${env.BUILD_TIMESTAMP} \n More info at: ${BUILD_URL}"
-                }
-            }
-        }
         stage('BUILD'){
             steps{
                 sh 'mvn -s settings.xml install -DskipTests'
